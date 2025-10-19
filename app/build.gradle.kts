@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.teacherstore"
+    namespace = "com.example.levelupmovil"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.teacherstore"
+        applicationId = "com.example.levelupmovil"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
