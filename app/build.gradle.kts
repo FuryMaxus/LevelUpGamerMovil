@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3) // También gestionado por el BOM
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Dependencias de testing
     testImplementation(libs.junit)

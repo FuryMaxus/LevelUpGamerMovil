@@ -11,9 +11,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.ui.components.BottomBar
+import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.viewmodel.MainViewModel
 
 
@@ -22,7 +24,11 @@ import com.example.levelupmovil.viewmodel.MainViewModel
 fun MainScreen() {
     val viewModel: MainViewModel = viewModel()
     val navController = rememberNavController()
-
+    val sampleProducts = listOf(
+        Product(1, "Producto 1", 10.0, "https://www.clinicaswecan.com/imagenes/blogs/9_imagen_5bce843dd76db8c939d5323dd3e54ec9.jpg"),
+        Product(2, "Producto 2", 20.0, "https://upload.wikimedia.org/wikipedia/commons/2/20/Avant-Tower-Gaming-PC.png"),
+        Product(3, "Producto 3", 30.0, "https://upload.wikimedia.org/wikipedia/commons/2/20/Avant-Tower-Gaming-PC.png")
+    )
     LaunchedEffect(Unit) {
         viewModel.navEvents.collect{ event ->
             when(event) {
@@ -64,7 +70,12 @@ fun MainScreen() {
                 Text("Pantalla Perfil")
             }
             composable(AppRoute.Catalog.route) {
-                Text("Pantalla Catalogo")
+                CatalogScreen(
+                    products = sampleProducts,
+                    onProductClick = { product ->
+
+                    }
+                )
             }
             composable(AppRoute.LevelUp.route) {
                 Text("Pantalla Level up")
