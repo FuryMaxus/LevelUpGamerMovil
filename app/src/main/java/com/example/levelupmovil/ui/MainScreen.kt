@@ -8,15 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
 
@@ -27,12 +30,7 @@ fun MainScreen() {
     val mainViewModel: MainViewModel = viewModel()
     val navController = rememberNavController()
     val searchViewModel: SearchViewModel = viewModel()
-
-    val sampleProducts = listOf(
-        Product(1, "Producto 1", 10.0, "https://www.clinicaswecan.com/imagenes/blogs/9_imagen_5bce843dd76db8c939d5323dd3e54ec9.jpg"),
-        Product(2, "Producto 2", 20.0, "https://upload.wikimedia.org/wikipedia/commons/2/20/Avant-Tower-Gaming-PC.png"),
-        Product(3, "Producto 3", 30.0, "https://upload.wikimedia.org/wikipedia/commons/2/20/Avant-Tower-Gaming-PC.png")
-    )
+    val catalogViewModel: CatalogViewModel = viewModel()
 
 
     LaunchedEffect(Unit) {
@@ -60,9 +58,17 @@ fun MainScreen() {
     Scaffold(
         topBar = {
             TopBar(
-                viewModel = searchViewModel,
+                searchViewModel = searchViewModel,
                 onCartClick = {
-                    mainViewModel.navigateTo(AppRoute.Cart,singleTop=true,popRoute = AppRoute.Home)
+                    mainViewModel.navigateTo(
+                        AppRoute.Cart,
+                        singleTop = true,
+                        popRoute = AppRoute.Home
+                    )
+                },
+                onSearch = {
+                        query ->
+                    navController.navigate(AppRoute.Catalog.route + "?searchQuery=${query.trim()}")
                 }
             )
         },
@@ -83,11 +89,21 @@ fun MainScreen() {
             composable(AppRoute.Profile.route) {
                 Text("Pantalla Perfil")
             }
-            composable(AppRoute.Catalog.route) {
-                CatalogScreen(
-                    products = sampleProducts,
-                    onProductClick = { product ->
+            composable(
+                route = AppRoute.Catalog.route + "?searchQuery={searchQuery}",
+                arguments = listOf(
+                    navArgument("searchQuery"){
+                        type = NavType.StringType
+                        defaultValue = ""
                     }
+                )
+            ) { backStackEntry ->
+                val query = backStackEntry.arguments?.getString("searchQuery") ?: ""
+                CatalogScreen(
+                    onProductClick = { product ->
+                    },
+                    searchQuery = query,
+                    catalogViewModel = catalogViewModel,
                 )
             }
             composable(AppRoute.LevelUp.route) {
@@ -95,6 +111,7 @@ fun MainScreen() {
             }
 
             composable(AppRoute.Cart.route){
+
                 Text("Carrito")
             }
         }

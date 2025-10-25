@@ -49,6 +49,7 @@ fun ProductItem(product: Product, onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column() {
+                Text(text = product.brand, style = MaterialTheme.typography.titleSmall)
                 Text(text = product.name, style = MaterialTheme.typography.titleMedium)
                 Text(text = "$${product.price}", style = MaterialTheme.typography.bodyMedium)
             }

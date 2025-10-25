@@ -37,10 +37,10 @@ import com.example.levelupmovil.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    viewModel: SearchViewModel = viewModel(),
-    onCartClick: () -> Unit = {}
+    searchViewModel: SearchViewModel = viewModel(),
+    onCartClick: () -> Unit,
+    onSearch: (String) -> Unit
 ){
-    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     TopAppBar(
          colors = TopAppBarDefaults.topAppBarColors(
              containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -51,10 +51,10 @@ fun TopBar(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.logo), // your custom image
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = "App logo",
                     modifier = Modifier
-                        .size (32.dp)
+                        .size(32.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
@@ -62,9 +62,12 @@ fun TopBar(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 SearchBar(
-                    query = viewModel.query.value,
-                    onQueryChange = viewModel::onQueryChange,
-                    modifier = Modifier.weight(1f).height(54.dp)
+                    query = searchViewModel.searchQuery,
+                    onQueryChange = { searchViewModel.updateQuery(it) },
+                    onSearch = { onSearch(searchViewModel.searchQuery) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(54.dp)
                 )
             }
         },

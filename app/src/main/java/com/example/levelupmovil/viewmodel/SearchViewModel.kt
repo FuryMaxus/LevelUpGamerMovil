@@ -1,13 +1,14 @@
 package com.example.levelupmovil.viewmodel
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class SearchViewModel : ViewModel() {
-
-    var query = mutableStateOf("")
+    var searchQuery by mutableStateOf("")
         private set
 
-    fun onQueryChange(newValue: String) {
-        query.value = newValue
+    fun updateQuery(newQuery: String) {
+        searchQuery = newQuery
     }
 }
