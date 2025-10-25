@@ -62,7 +62,7 @@ fun MainScreen() {
             TopBar(
                 viewModel = searchViewModel,
                 onCartClick = {
-                    mainViewModel.navigateTo(AppRoute.LevelUp)
+                    mainViewModel.navigateTo(AppRoute.Cart,singleTop=true,popRoute = AppRoute.Home)
                 }
             )
         },
@@ -87,12 +87,15 @@ fun MainScreen() {
                 CatalogScreen(
                     products = sampleProducts,
                     onProductClick = { product ->
-
                     }
                 )
             }
             composable(AppRoute.LevelUp.route) {
                 Text("Pantalla Level up")
+            }
+
+            composable(AppRoute.Cart.route){
+                Text("Carrito")
             }
         }
 
