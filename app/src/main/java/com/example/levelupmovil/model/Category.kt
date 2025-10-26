@@ -10,7 +10,7 @@ enum class Category(val displayName: String, val imageRes: Int) {
     CONSOLES("Consolas",R.drawable.console_example),
     CHAIRS("Sillas Gamer",R.drawable.game_chair_example),
     MOUSES("Mouses",R.drawable.mouse_example),
-    MOUSE_PAD("Mouse Pads",R.drawable.mousepad_example),
+    MOUSE_PADS("Mouse Pads",R.drawable.mousepad_example),
     SHIRTS("Poleras",R.drawable.polera_example),
     HOODIES("Polerones",R.drawable.poleron_example)
 }

@@ -3,6 +3,7 @@ package com.example.levelupmovil.ui.components
 import android.view.RoundedCorner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,17 +33,19 @@ fun CategoryButton(
     isSelected: Boolean
 ){
 
-    val backgroundColor = if (isSelected) Color(0xFF1E90FF) else Color(0xFF39FF14)
-    val textColor = Color.Black
+    val borderColor = if (isSelected) Color(0xFF1E90FF) else Color(0xFF39FF14)
+    val textColor = Color.White
 
     Surface(
         modifier = Modifier
-        .width(100.dp)
-        .height(100.dp)
-        .clickable { onClick(category) },
-        color = backgroundColor,
-        shadowElevation = if (isSelected) 8.dp else 2.dp,
-        shape = RoundedCornerShape(12.dp))
+            .width(100.dp)
+            .height(100.dp)
+            .clickable { onClick(category) }
+            .border(width = 3.dp, color = borderColor, shape = RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.Black
+    )
+
     {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -51,13 +54,14 @@ fun CategoryButton(
             Image(
                 painter = painterResource(id = category.imageRes),
                 contentDescription = category.displayName,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(45.dp)
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = category.displayName,
                 style = MaterialTheme.typography.labelMedium,
-                color = textColor
+                color = textColor,
+                textAlign = TextAlign.Center
             )
         }
     }
