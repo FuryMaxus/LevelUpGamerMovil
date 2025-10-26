@@ -1,7 +1,11 @@
 package com.example.levelupmovil.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName= "products")
 data class Product(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val name: String,
     val brand: String,
     val price: Int,
@@ -9,4 +13,4 @@ data class Product(
     val condition: ProductCondition,
     val imageUrl: String,
 
-)
+    )

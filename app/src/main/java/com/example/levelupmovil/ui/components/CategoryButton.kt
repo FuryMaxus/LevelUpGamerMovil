@@ -32,7 +32,6 @@ fun CategoryButton(
     onClick: (Category) -> Unit,
     isSelected: Boolean
 ){
-
     val borderColor = if (isSelected) Color(0xFF1E90FF) else Color(0xFF39FF14)
     val textColor = Color.White
 
@@ -44,9 +43,7 @@ fun CategoryButton(
             .border(width = 3.dp, color = borderColor, shape = RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp),
         color = Color.Black
-    )
-
-    {
+    ){
         Column(
             modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally

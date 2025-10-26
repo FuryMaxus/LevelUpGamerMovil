@@ -1,5 +1,6 @@
 package com.example.levelupmovil.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -7,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,10 +18,12 @@ import androidx.navigation.navArgument
 import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
+import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.viewmodel.CatalogViewModel
+import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
 
@@ -27,17 +31,27 @@ import com.example.levelupmovil.viewmodel.SearchViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-    val mainViewModel: MainViewModel = viewModel()
-    val navController = rememberNavController()
-    val searchViewModel: SearchViewModel = viewModel()
-    val catalogViewModel: CatalogViewModel = viewModel()
 
+    val context = LocalContext.current
+
+    val mainViewModel: MainViewModel = viewModel()
+    val searchViewModel: SearchViewModel = viewModel()
+
+    val productDao = AppDataBase.getDatabase(context).productDao()
+    val catalogViewModel: CatalogViewModel = viewModel(
+        factory = CatalogViewModelFactory(productDao)
+    )
+
+    val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
             when(event) {
                 is NavigationEvent.NavigateTo -> {
-                    navController.navigate(event.appRoute.route) {
+                    val routeWithArgs = event.args?.entries?.joinToString("&") { "${it.key}=${it.value}" }
+                        ?.let { "${event.appRoute.route}?$it" } ?: event.appRoute.route
+
+                    navController.navigate(routeWithArgs) {
                         launchSingleTop=event.singleTop
                         restoreState=true
                         event.popRoute?.let {
@@ -63,18 +77,20 @@ fun MainScreen() {
                     mainViewModel.navigateTo(
                         AppRoute.Cart,
                         singleTop = true,
-                        popRoute = AppRoute.Home
                     )
                 },
                 onSearch = {
                         query ->
-                    navController.navigate(AppRoute.Catalog.route + "?searchQuery=${query.trim()}")
-                }
-            )
+                    mainViewModel.navigateTo(
+                        AppRoute.Catalog,
+                        args = mapOf("searchQuery" to query.trim())
+                    )
+                })
+
         },
         bottomBar = {
             BottomBar{route ->
-                mainViewModel.navigateTo(route,singleTop=true,popRoute = AppRoute.Home)
+                mainViewModel.navigateTo(route,singleTop=true)
             }
         }
     ) { innerPadding ->
@@ -111,7 +127,6 @@ fun MainScreen() {
             }
 
             composable(AppRoute.Cart.route){
-
                 Text("Carrito")
             }
         }

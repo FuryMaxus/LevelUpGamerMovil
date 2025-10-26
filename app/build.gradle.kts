@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -81,6 +82,13 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3) // También gestionado por el BOM
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.androidx.databinding.adapters)
+
+    val room_version = "2.8.3"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:${room_version}")
 
     // Dependencias de testing
     testImplementation(libs.junit)

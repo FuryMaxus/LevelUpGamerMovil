@@ -1,6 +1,4 @@
 package com.example.levelupmovil.ui.components
-
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ManageSearch
 import androidx.compose.material.icons.filled.Home

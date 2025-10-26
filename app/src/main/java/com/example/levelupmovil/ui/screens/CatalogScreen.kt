@@ -30,6 +30,7 @@ fun CatalogScreen(
         catalogViewModel.filterProducts(searchQuery)
     }
 
+
     Column {
         CategorySlider(
             selectedCategory = selectedCategory,

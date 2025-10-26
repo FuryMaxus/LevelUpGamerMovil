@@ -1,36 +1,41 @@
 package com.example.levelupmovil.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 
 import com.example.levelupmovil.model.Category
 import com.example.levelupmovil.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.example.levelupmovil.model.sampleProducts
+import com.example.levelupmovil.repository.ProductDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CatalogViewModel: ViewModel() {
+class CatalogViewModel(private val productDao: ProductDao): ViewModel() {
 
-    private val _allProducts = sampleProducts
-
-    private val _filteredProducts = MutableStateFlow<List<Product>>(_allProducts)
+    private val _filteredProducts = MutableStateFlow<List<Product>>(emptyList())
     val filteredProducts: StateFlow<List<Product>> get() = _filteredProducts
 
     private val _selectedCategory = MutableStateFlow<Category?>(null)
     val selectedCategory: StateFlow<Category?> = _selectedCategory
+
     private var currentQuery = ""
+
+    init {
+        filterProducts()
+    }
 
     fun filterProducts(query: String = currentQuery, category: Category? = _selectedCategory.value) {
         currentQuery = query
         _selectedCategory.value = category
 
-        val filtered = _allProducts.filter { product ->
-            val matchesQuery = product.name.contains(query, ignoreCase = true)
-            val matchesCategory = category == null || product.category == category
-            matchesQuery && matchesCategory
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = productDao.getFilteredProducts(
+                query.takeIf { it.isNotEmpty() },
+                category?.name
+            )
+            _filteredProducts.value = results
         }
-
-        println("Query: '$query', Category: '$category', Filtrados: ${filtered.map { it.name }}")
-        _filteredProducts.value = filtered
     }
 
     fun selectCategory(category: Category?) {
