@@ -12,11 +12,9 @@ import com.example.levelupmovil.viewmodel.MainViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: MainViewModel = viewModel(),
+    mainViewModel: MainViewModel = viewModel(),
     navController: NavController
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
-
 }

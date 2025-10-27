@@ -5,4 +5,6 @@ sealed class AppRoute(val route: String) {
     data object Catalog: AppRoute("catalog")
     data object Profile: AppRoute("profile")
     data object LevelUp: AppRoute("level-up")
+
+    data object Cart: AppRoute("cart")
 }

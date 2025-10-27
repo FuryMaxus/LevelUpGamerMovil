@@ -1,5 +1,6 @@
 package com.example.levelupmovil.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -7,27 +8,50 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
+import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
+import com.example.levelupmovil.ui.components.TopBar
+import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.viewmodel.CatalogViewModel
+import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.MainViewModel
+import com.example.levelupmovil.viewmodel.SearchViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-    val viewModel: MainViewModel = viewModel()
+
+    val context = LocalContext.current
+
+    val mainViewModel: MainViewModel = viewModel()
+    val searchViewModel: SearchViewModel = viewModel()
+
+    val productDao = AppDataBase.getDatabase(context).productDao()
+    val catalogViewModel: CatalogViewModel = viewModel(
+        factory = CatalogViewModelFactory(productDao)
+    )
+
     val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
-        viewModel.navEvents.collect{ event ->
+        mainViewModel.navEvents.collect{ event ->
             when(event) {
                 is NavigationEvent.NavigateTo -> {
-                    navController.navigate(event.appRoute.route) {
+                    val routeWithArgs = event.args?.entries?.joinToString("&") { "${it.key}=${it.value}" }
+                        ?.let { "${event.appRoute.route}?$it" } ?: event.appRoute.route
+
+                    navController.navigate(routeWithArgs) {
                         launchSingleTop=event.singleTop
                         restoreState=true
                         event.popRoute?.let {
@@ -46,9 +70,27 @@ fun MainScreen() {
     }
 
     Scaffold(
+        topBar = {
+            TopBar(
+                searchViewModel = searchViewModel,
+                onCartClick = {
+                    mainViewModel.navigateTo(
+                        AppRoute.Cart,
+                        singleTop = true,
+                    )
+                },
+                onSearch = {
+                        query ->
+                    mainViewModel.navigateTo(
+                        AppRoute.Catalog,
+                        args = mapOf("searchQuery" to query.trim())
+                    )
+                })
+
+        },
         bottomBar = {
             BottomBar{route ->
-                viewModel.navigateTo(route,singleTop=true,popRoute = AppRoute.Home)
+                mainViewModel.navigateTo(route,singleTop=true)
             }
         }
     ) { innerPadding ->
@@ -63,11 +105,29 @@ fun MainScreen() {
             composable(AppRoute.Profile.route) {
                 Text("Pantalla Perfil")
             }
-            composable(AppRoute.Catalog.route) {
-                Text("Pantalla Catalogo")
+            composable(
+                route = AppRoute.Catalog.route + "?searchQuery={searchQuery}",
+                arguments = listOf(
+                    navArgument("searchQuery"){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ) { backStackEntry ->
+                val query = backStackEntry.arguments?.getString("searchQuery") ?: ""
+                CatalogScreen(
+                    onProductClick = { product ->
+                    },
+                    searchQuery = query,
+                    catalogViewModel = catalogViewModel,
+                )
             }
             composable(AppRoute.LevelUp.route) {
                 Text("Pantalla Level up")
+            }
+
+            composable(AppRoute.Cart.route){
+                Text("Carrito")
             }
         }
 
