@@ -20,7 +20,8 @@ import com.example.levelupmovil.viewmodel.CatalogViewModel
 fun CatalogScreen(
     searchQuery: String,
     catalogViewModel: CatalogViewModel,
-    onProductClick: (Product) -> Unit
+    onProductClick: (Product) -> Unit,
+    onAddToCartClick: (Product) -> Unit
 ) {
 
     val products by catalogViewModel.filteredProducts.collectAsState()
@@ -46,7 +47,11 @@ fun CatalogScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(products) {p ->
-                ProductItem(p, onClick = { onProductClick(p) })
+                ProductItem(
+                    product = p,
+                    onClick = { onProductClick(p) },
+                    onButtonClick = {onAddToCartClick(p)}
+                )
             }
         }
     }

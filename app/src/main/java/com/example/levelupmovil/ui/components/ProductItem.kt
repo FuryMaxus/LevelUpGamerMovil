@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +25,11 @@ import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.R
 
 @Composable
-fun ProductItem(product: Product, onClick: () -> Unit) {
+fun ProductItem(
+    product: Product,
+    onClick: () -> Unit,
+    onButtonClick: (Product) -> Unit
+) {
 
     Card(
         modifier = Modifier
@@ -52,6 +57,10 @@ fun ProductItem(product: Product, onClick: () -> Unit) {
                 Text(text = product.brand, style = MaterialTheme.typography.titleSmall)
                 Text(text = product.name, style = MaterialTheme.typography.titleMedium)
                 Text(text = "$${product.price}", style = MaterialTheme.typography.bodyMedium)
+            }
+            Spacer(modifier = Modifier.width(6.dp))
+            Button({ onButtonClick(product) }) {
+                Text("Añadir al carrito")
             }
         }
 

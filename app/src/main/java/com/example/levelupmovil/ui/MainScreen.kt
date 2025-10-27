@@ -22,6 +22,7 @@ import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.MainViewModel
@@ -36,6 +37,7 @@ fun MainScreen() {
 
     val mainViewModel: MainViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
+    val cartViewModel: CartViewModel = viewModel()
 
     val productDao = AppDataBase.getDatabase(context).productDao()
     val catalogViewModel: CatalogViewModel = viewModel(
@@ -120,6 +122,9 @@ fun MainScreen() {
                     },
                     searchQuery = query,
                     catalogViewModel = catalogViewModel,
+                    onAddToCartClick = { product ->
+                        cartViewModel.addToCart(product)
+                    }
                 )
             }
             composable(AppRoute.LevelUp.route) {
