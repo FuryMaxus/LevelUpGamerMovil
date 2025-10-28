@@ -40,6 +40,7 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        Text("Crea Tu Cuenta LEVEL UP GAMER")
         //campo name
         OutlinedTextField(
             value = estado.name,
