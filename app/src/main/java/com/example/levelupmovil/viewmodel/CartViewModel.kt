@@ -13,34 +13,36 @@ class CartViewModel: ViewModel() {
     val cartItems: StateFlow<List<CartItem>> get() =_cartItems
 
     fun addToCart(product: Product) {
-        val currentList = _cartItems.value.toMutableList()
-        val existingItem = currentList.find {it.product.id == product.id}
+        val updatedList = _cartItems.value.toMutableList()
+        val index = updatedList.indexOfFirst { it.product.id == product.id }
 
-        if (existingItem != null) {
-            existingItem.quantity++
-        }else{
-            currentList.add(CartItem(product))
+        if (index >= 0) {
+            val existing = updatedList[index]
+            updatedList[index] = existing.copy(quantity = existing.quantity + 1)
+        } else {
+            updatedList.add(CartItem(product = product))
         }
-        _cartItems.value = currentList
+
+        _cartItems.value = updatedList.toList()
     }
 
     fun removeFromCart(product: Product){
-        val currentList = _cartItems.value.toMutableList()
-        currentList.removeAll { it.product.id == product.id }
-        _cartItems.value = currentList
+        _cartItems.value = _cartItems.value.filterNot { it.product.id == product.id }
     }
 
     fun updateQuantity(product: Product,newQuantity: Int) {
-        val currentList = _cartItems.value.toMutableList()
-        val item = currentList.find { it.product.id == product.id }
-        if (item != null) {
-            if (newQuantity > 0){
-                item.quantity = newQuantity
-            }else {
-                currentList.remove(item)
+        val updatedList = _cartItems.value.toMutableList()
+        val index = updatedList.indexOfFirst { it.product.id == product.id }
+
+        if (index >= 0) {
+            val existing = updatedList[index]
+            if (newQuantity > 0) {
+                updatedList[index] = existing.copy(quantity = newQuantity)
+            } else {
+                updatedList.removeAt(index)
             }
+            _cartItems.value = updatedList.toList()
         }
-        _cartItems.value = currentList
 
     }
 

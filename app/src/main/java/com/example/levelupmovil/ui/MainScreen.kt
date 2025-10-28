@@ -1,6 +1,5 @@
 package com.example.levelupmovil.ui
 
-import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -15,7 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
@@ -87,8 +85,9 @@ fun MainScreen() {
                         AppRoute.Catalog,
                         args = mapOf("searchQuery" to query.trim())
                     )
-                })
-
+                },
+                cartViewModel = cartViewModel
+            )
         },
         bottomBar = {
             BottomBar{route ->
