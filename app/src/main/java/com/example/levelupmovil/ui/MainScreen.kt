@@ -19,6 +19,7 @@ import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.ui.components.TopBar
+import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
@@ -131,7 +132,7 @@ fun MainScreen() {
             }
 
             composable(AppRoute.Cart.route){
-                Text("Carrito")
+                CartScreen(cartViewModel)
             }
         }
 

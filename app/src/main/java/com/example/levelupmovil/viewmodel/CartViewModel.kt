@@ -50,9 +50,7 @@ class CartViewModel: ViewModel() {
         _cartItems.value = emptyList()
     }
 
-    fun getTotalPrice(): Int {
-        return _cartItems.value.sumOf { it.product.price * it.quantity }
-    }
+
 
 
 }
