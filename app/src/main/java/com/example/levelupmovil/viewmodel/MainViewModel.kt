@@ -18,7 +18,8 @@ class MainViewModel: ViewModel() {
         route: AppRoute,
         popRoute: AppRoute? = null,
         inclusive: Boolean = false,
-        singleTop: Boolean = true // <- ahora sí puedes pasarlo
+        singleTop: Boolean = false ,
+        args: Map<String, String>? = null
     ){
         viewModelScope.launch {
             _navEvents.emit(
@@ -26,7 +27,8 @@ class MainViewModel: ViewModel() {
                     appRoute = route,
                     popRoute = popRoute,
                     inclusive = inclusive,
-                    singleTop = singleTop
+                    singleTop = singleTop,
+                    args
                 )
             )
         }
