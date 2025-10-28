@@ -1,6 +1,5 @@
 package com.example.levelupmovil.ui
 
-import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -15,13 +14,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.levelupmovil.model.Product
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.ui.components.TopBar
+import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.MainViewModel
@@ -36,6 +36,7 @@ fun MainScreen() {
 
     val mainViewModel: MainViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
+    val cartViewModel: CartViewModel = viewModel()
 
     val productDao = AppDataBase.getDatabase(context).productDao()
     val catalogViewModel: CatalogViewModel = viewModel(
@@ -85,8 +86,15 @@ fun MainScreen() {
                         AppRoute.Catalog,
                         args = mapOf("searchQuery" to query.trim())
                     )
-                })
-
+                },
+                cartViewModel = cartViewModel,
+                onLogoClick = {
+                    mainViewModel.navigateTo(
+                        AppRoute.Home,
+                        singleTop = true,
+                    )
+                }
+            )
         },
         bottomBar = {
             BottomBar{route ->
@@ -120,6 +128,9 @@ fun MainScreen() {
                     },
                     searchQuery = query,
                     catalogViewModel = catalogViewModel,
+                    onAddToCartClick = { product ->
+                        cartViewModel.addToCart(product)
+                    }
                 )
             }
             composable(AppRoute.LevelUp.route) {
@@ -127,7 +138,7 @@ fun MainScreen() {
             }
 
             composable(AppRoute.Cart.route){
-                Text("Carrito")
+                CartScreen(cartViewModel)
             }
         }
 

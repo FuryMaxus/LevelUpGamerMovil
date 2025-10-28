@@ -18,7 +18,7 @@ class MainViewModel: ViewModel() {
         route: AppRoute,
         popRoute: AppRoute? = null,
         inclusive: Boolean = false,
-        singleTop: Boolean = true ,
+        singleTop: Boolean = false ,
         args: Map<String, String>? = null
     ){
         viewModelScope.launch {
