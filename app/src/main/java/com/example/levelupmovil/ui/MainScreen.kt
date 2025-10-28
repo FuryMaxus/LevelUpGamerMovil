@@ -14,7 +14,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.ui.components.BottomBar
+import com.example.levelupmovil.ui.screens.LoginScreen
 import com.example.levelupmovil.ui.screens.RegisterScreen
+import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.viewmodel.UsuarioViewModel
 
@@ -25,6 +27,7 @@ fun MainScreen() {
     val viewModel: MainViewModel = viewModel()
     val navController = rememberNavController()
     val usuarioViewModel: UsuarioViewModel = viewModel()
+    val loginViewModel: LoginViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         viewModel.navEvents.collect{ event ->
@@ -74,7 +77,9 @@ fun MainScreen() {
             }
             composable(AppRoute.Register.route){
                 RegisterScreen(navController = navController, viewModel = usuarioViewModel)
-
+            }
+            composable(AppRoute.Login.route){
+                LoginScreen(navController = navController, viewModel = loginViewModel)
             }
         }
 
