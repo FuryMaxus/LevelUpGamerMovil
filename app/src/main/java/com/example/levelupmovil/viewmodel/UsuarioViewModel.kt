@@ -1,0 +1,60 @@
+package com.example.levelupmovil.viewmodel
+
+import android.util.Patterns
+import androidx.lifecycle.ViewModel
+import com.example.levelupmovil.model.UsuarioErrores
+import com.example.levelupmovil.model.UsuarioUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+
+class UsuarioViewModel : ViewModel() {
+    private val _estado = MutableStateFlow(UsuarioUiState())
+
+    val estado: StateFlow<UsuarioUiState> = _estado
+
+
+
+    //actualizar campos y limpiar errores
+    fun onNameChange(newName: String){
+        _estado.update { it.copy(name = newName, errors = it.errors.copy(name = null)) }
+    }
+
+    fun onEmailChange(newEmail: String){
+        _estado.update { it.copy(email = newEmail, errors = it.errors.copy(email = null)) }
+    }
+
+    fun onPasswordChange(newPassword: String){
+        _estado.update { it.copy(password = newPassword, errors = it.errors.copy(password = null)) }
+    }
+
+    fun onAceptaTerminosChange(newAceptaTerminos: Boolean){
+        _estado.update { it.copy(aceptaTerminos = newAceptaTerminos) }
+    }
+
+    //validacion form
+    fun validarFormulario(): Boolean {
+        val formularioActual = _estado.value
+        val errors = UsuarioErrores(
+            name = if (formularioActual.name.isBlank()) "Error, Campo Obligatorio!" else null,
+            email = if (!Patterns.EMAIL_ADDRESS.matcher(formularioActual.email)
+                    .matches()
+            ) "Error, El E-mail debe ser válido!" else null,
+            password = if (formularioActual.password.length < 6) "Error, La Contraseña debe tener al menos 6 carácteres!" else null
+        )
+
+
+        //si alguno no arroja null es porque hay error
+        val hayErrores = listOfNotNull(
+            errors.name,
+            errors.password
+        ).isNotEmpty()
+
+        _estado.update { it.copy(errors = errors) }
+
+        return !hayErrores
+
+    }
+
+
+}
