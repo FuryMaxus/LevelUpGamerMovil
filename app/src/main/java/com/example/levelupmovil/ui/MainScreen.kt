@@ -87,7 +87,13 @@ fun MainScreen() {
                         args = mapOf("searchQuery" to query.trim())
                     )
                 },
-                cartViewModel = cartViewModel
+                cartViewModel = cartViewModel,
+                onLogoClick = {
+                    mainViewModel.navigateTo(
+                        AppRoute.Home,
+                        singleTop = true,
+                    )
+                }
             )
         },
         bottomBar = {

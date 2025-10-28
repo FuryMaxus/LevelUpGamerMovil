@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CropSquare
@@ -27,8 +28,11 @@ fun CartItemRow(
     onDecrease: () -> Unit,
     onRemove: () -> Unit
 ){
-
+    val iconSize = 60.dp
     Column(
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         Text(
             text = cartItem.product.name,
@@ -37,24 +41,24 @@ fun CartItemRow(
 
         Row(
         ) {
-            IconButton(onClick = onDecrease) {
+            IconButton(onClick = onDecrease,modifier = Modifier.size(iconSize)) {
                 Icon(
                     imageVector = Icons.Default.Remove,
-                    contentDescription = "Reducir cantidad"
+                    contentDescription = "Reducir cantidad",
                 )
             }
-            IconButton(onClick = onIncrease) {
+            IconButton(onClick = onIncrease,modifier = Modifier.size(iconSize)) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Incrementar cantidad"
-
+                    contentDescription = "Incrementar cantidad",
                 )
             }
-            IconButton(onClick = onRemove) {
+            IconButton(onClick = onRemove,modifier = Modifier.size(iconSize)) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Quitar producto"
+                    contentDescription = "Quitar producto",
                 )
+
             }
         }
 

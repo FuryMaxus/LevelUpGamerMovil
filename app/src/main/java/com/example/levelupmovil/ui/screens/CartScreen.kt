@@ -36,8 +36,11 @@ fun CartScreen(cartViewModel: CartViewModel){
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(12.dp)
         ){
+            item{
+                HorizontalDivider()
+            }
             items(cartItems) { item ->
                 CartItemRow(
                     cartItem = item,
@@ -53,6 +56,12 @@ fun CartScreen(cartViewModel: CartViewModel){
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Continuar Compra")
+                }
                 Button(
                     onClick = {cartViewModel.clearCart()},
                     modifier = Modifier.fillMaxWidth()

@@ -41,7 +41,8 @@ fun TopBar(
     searchViewModel: SearchViewModel = viewModel(),
     onCartClick: () -> Unit,
     onSearch: (String) -> Unit,
-    cartViewModel: CartViewModel
+    cartViewModel: CartViewModel,
+    onLogoClick: () -> Unit
 ){
 
     val cartItems by cartViewModel.cartItems.collectAsState()
@@ -52,18 +53,25 @@ fun TopBar(
              containerColor = MaterialTheme.colorScheme.primaryContainer,
              titleContentColor = MaterialTheme.colorScheme.primary
          ),
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ){
+        navigationIcon = {
+            IconButton(onClick = onLogoClick) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "App logo",
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+                    contentScale = ContentScale.Crop,
+
+                    )
+            }
+        },
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+
 
                 Spacer(modifier = Modifier.width(8.dp))
 
