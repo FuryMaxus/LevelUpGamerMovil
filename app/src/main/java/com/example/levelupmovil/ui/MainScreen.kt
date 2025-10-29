@@ -29,7 +29,6 @@ import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
-import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
 
 
