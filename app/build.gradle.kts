@@ -83,7 +83,7 @@ dependencies {
     implementation(libs.androidx.compose.material3) // También gestionado por el BOM
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation(libs.androidx.databinding.adapters)
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
     val room_version = "2.8.3"
 
     implementation("androidx.room:room-runtime:$room_version")

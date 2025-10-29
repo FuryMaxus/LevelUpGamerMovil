@@ -2,4 +2,12 @@
 <resources>
 
     <style name="Theme.LevelUpMovil" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.LevelUpMovil</item>
+    </style>
 </resources>
