@@ -15,7 +15,7 @@ class UsuarioViewModel : ViewModel() {
 
 
 
-    //actualizar campos y limpiar errores
+
     fun onNameChange(newName: String){
         _estado.update { it.copy(name = newName, errors = it.errors.copy(name = null)) }
     }
@@ -32,7 +32,7 @@ class UsuarioViewModel : ViewModel() {
         _estado.update { it.copy(aceptaTerminos = newAceptaTerminos) }
     }
 
-    //validacion form
+
     fun validarFormulario(): Boolean {
         val formularioActual = _estado.value
         val errors = UsuarioErrores(
@@ -44,7 +44,7 @@ class UsuarioViewModel : ViewModel() {
         )
 
 
-        //si alguno no arroja null es porque hay error
+
         val hayErrores = listOfNotNull(
             errors.name,
             errors.password

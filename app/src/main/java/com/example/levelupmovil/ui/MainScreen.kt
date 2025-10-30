@@ -29,7 +29,6 @@ import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
-import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
 
 
@@ -144,10 +143,30 @@ fun MainScreen() {
                 Text("Pantalla Level up")
             }
             composable(AppRoute.Register.route){
-                RegisterScreen(navController = navController, viewModel = usuarioViewModel)
+                RegisterScreen(
+                    viewModel = usuarioViewModel,
+                    onRegisterSuccess = {
+                        mainViewModel.navigateTo(
+                            AppRoute.Home,
+                            singleTop = true,
+                            popRoute = AppRoute.Register,
+                            inclusive = true
+                        )
+                    }
+                )
             }
             composable(AppRoute.Login.route){
-                LoginScreen(navController = navController, viewModel = loginViewModel)
+                LoginScreen(
+                    viewModel = loginViewModel,
+                    onLoginSuccess = {
+                        mainViewModel.navigateTo(
+                            AppRoute.Home,
+                            singleTop = true,
+                            popRoute = AppRoute.Login,
+                            inclusive = true
+                        )
+                    }
+                )
             }
             composable(AppRoute.Cart.route){
                 CartScreen(cartViewModel)

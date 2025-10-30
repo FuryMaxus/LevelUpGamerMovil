@@ -20,15 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.viewmodel.UsuarioViewModel
 
 
 
 @Composable
 fun RegisterScreen(
-    navController: NavController,
+    onRegisterSuccess: () -> Unit,
     viewModel: UsuarioViewModel
 ){
     val estado by viewModel.estado.collectAsState()
@@ -41,7 +39,7 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text("Crea Tu Cuenta LEVEL UP GAMER")
-        //campo name
+
         OutlinedTextField(
             value = estado.name,
             onValueChange = viewModel::onNameChange,
@@ -56,7 +54,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        //campo email
+
         OutlinedTextField(
             value = estado.email,
             onValueChange = viewModel::onEmailChange,
@@ -71,7 +69,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        //campo password
+
         OutlinedTextField(
             value = estado.password,
             onValueChange = viewModel::onPasswordChange,
@@ -86,7 +84,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        //campo aceptaTerminos
+
         Row(verticalAlignment = Alignment.CenterVertically){
             Checkbox(
                 checked = estado.aceptaTerminos,
@@ -95,11 +93,11 @@ fun RegisterScreen(
             Spacer(Modifier.width(8.dp))
             Text("Acepto los términos y condiciones")
         }
-        //boton para enviar
+
         Button(
             onClick = {
                 if (viewModel.validarFormulario()&& estado.aceptaTerminos){
-                    navController.navigate(AppRoute.Home.route)
+                    onRegisterSuccess()
                 }
             },
             modifier = Modifier.fillMaxWidth()

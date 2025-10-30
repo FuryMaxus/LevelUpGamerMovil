@@ -16,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.viewmodel.LoginViewModel
 
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onLoginSuccess: () -> Unit,
     viewModel: LoginViewModel
 ){
     val estado by viewModel.estado.collectAsState()
@@ -37,7 +35,7 @@ fun LoginScreen(
     ){
         Text("Inicia Sesión En Tu Cuenta LEVEL UP GAMER")
 
-        //campo email
+
         OutlinedTextField(
             value = estado.email,
             onValueChange = viewModel::onEmailChange,
@@ -52,7 +50,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        //campo password
+
         OutlinedTextField(
             value = estado.password,
             onValueChange = viewModel::onPasswordChange,
@@ -67,11 +65,11 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        //boton para enviar
+
         Button(
             onClick = {
                 if (viewModel.validarFormulario()){
-                    navController.navigate(AppRoute.Home.route)
+                    onLoginSuccess()
                 }
             },
             modifier = Modifier.fillMaxWidth()
