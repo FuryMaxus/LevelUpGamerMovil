@@ -34,17 +34,16 @@ import com.example.levelupmovil.viewmodel.SearchViewModel
 fun MainScreen() {
 
     val context = LocalContext.current
+    val navController = rememberNavController()
 
     val mainViewModel: MainViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
 
-    val productDao = AppDataBase.getDatabase(context).productDao()
-    val catalogViewModel: CatalogViewModel = viewModel(
-        factory = CatalogViewModelFactory(productDao)
-    )
 
-    val navController = rememberNavController()
+
+    val usuarioViewModel: UsuarioViewModel = viewModel()
+    val loginViewModel: LoginViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
@@ -99,7 +98,7 @@ fun MainScreen() {
         },
         bottomBar = {
             BottomBar{route ->
-                mainViewModel.navigateTo(route,singleTop=true)
+                mainViewModel.navigateTo(route,singleTop=true, popRoute = AppRoute.Home, inclusive = false)
             }
         }
     ) { innerPadding ->
@@ -123,7 +122,13 @@ fun MainScreen() {
                     }
                 )
             ) { backStackEntry ->
+
                 val query = backStackEntry.arguments?.getString("searchQuery") ?: ""
+                val productDao = AppDataBase.getDatabase(context).productDao()
+                val catalogViewModel: CatalogViewModel = viewModel(
+                    factory = CatalogViewModelFactory(productDao)
+                )
+
                 CatalogScreen(
                     onProductClick = { product ->
                     },
