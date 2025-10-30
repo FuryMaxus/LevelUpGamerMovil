@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import com.example.levelupmovil.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
+    onRegisterClick: () -> Unit,
     viewModel: LoginViewModel
 ){
     val estado by viewModel.estado.collectAsState()
@@ -75,6 +77,10 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar Sesión")
+        }
+
+        TextButton(onClick = onRegisterClick) {
+            Text("¿No tienes una cuenta? Registrate aquí.")
         }
 
     }

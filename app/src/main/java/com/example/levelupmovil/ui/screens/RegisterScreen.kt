@@ -13,6 +13,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import com.example.levelupmovil.viewmodel.UsuarioViewModel
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
+    onLoginClick: () -> Unit,
     viewModel: UsuarioViewModel
 ){
     val estado by viewModel.estado.collectAsState()
@@ -103,6 +105,10 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Registrarse")
+        }
+
+        TextButton(onClick = onLoginClick) {
+            Text("¿Ya tienes cuenta? Inicia Sesión.")
         }
     }
 
