@@ -18,11 +18,7 @@ import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
-import com.example.levelupmovil.ui.screens.LoginScreen
-import com.example.levelupmovil.ui.screens.RegisterScreen
-import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.MainViewModel
-import com.example.levelupmovil.viewmodel.UsuarioViewModel
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
@@ -49,8 +45,6 @@ fun MainScreen() {
     )
 
     val navController = rememberNavController()
-    val usuarioViewModel: UsuarioViewModel = viewModel()
-    val loginViewModel: LoginViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
