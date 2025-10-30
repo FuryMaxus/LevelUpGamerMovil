@@ -32,7 +32,7 @@ fun CategoryButton(
     onClick: (Category) -> Unit,
     isSelected: Boolean
 ){
-    val borderColor = if (isSelected) Color(0xFF1E90FF) else Color(0xFF39FF14)
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
     val textColor = Color.White
 
     Surface(
