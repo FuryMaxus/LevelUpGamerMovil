@@ -26,7 +26,9 @@ import com.example.levelupmovil.ui.screens.ProfileScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
+import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
+import com.example.levelupmovil.viewmodel.UsuarioViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,9 +43,6 @@ fun MainScreen() {
     val cartViewModel: CartViewModel = viewModel()
 
 
-
-    val usuarioViewModel: UsuarioViewModel = viewModel()
-    val loginViewModel: LoginViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
