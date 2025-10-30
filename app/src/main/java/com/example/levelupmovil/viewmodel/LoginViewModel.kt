@@ -14,7 +14,6 @@ class LoginViewModel : ViewModel() {
 
     val estado: StateFlow<LoginUiState> = _estado
 
-    //actualizar campos y limpiar errors
 
     fun onEmailChange(newEmail: String){
         _estado.update { it.copy(email = newEmail, errors = it.errors.copy(email = null)) }
@@ -25,7 +24,6 @@ class LoginViewModel : ViewModel() {
     }
 
 
-    //validamos formulariooo
 
     fun validarFormulario(): Boolean{
         val formularioActual = _estado.value
@@ -35,7 +33,6 @@ class LoginViewModel : ViewModel() {
         )
 
 
-        //si algun campo no arroja null es pq hay error
         val hayErrores = listOfNotNull(
             errors.email,
             errors.password

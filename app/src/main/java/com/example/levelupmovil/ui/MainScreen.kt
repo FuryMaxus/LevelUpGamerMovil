@@ -18,14 +18,11 @@ import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
 import com.example.levelupmovil.ui.components.BottomBar
-import com.example.levelupmovil.ui.screens.LoginScreen
-import com.example.levelupmovil.ui.screens.RegisterScreen
-import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.MainViewModel
-import com.example.levelupmovil.viewmodel.UsuarioViewModel
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.ui.screens.ProfileScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
@@ -145,11 +142,20 @@ fun MainScreen() {
             composable(AppRoute.LevelUp.route) {
                 Text("Pantalla Level up")
             }
-            composable(AppRoute.Register.route){
-                RegisterScreen(navController = navController, viewModel = usuarioViewModel)
-            }
-            composable(AppRoute.Login.route){
-                LoginScreen(navController = navController, viewModel = loginViewModel)
+            composable(AppRoute.Profile.route) {
+                ProfileScreen(
+                    onLoginSucces = {
+                        mainViewModel.navigateTo(
+                            AppRoute.Home,
+                            singleTop = true,
+                            popRoute = AppRoute.Profile,
+                            inclusive = true
+                        )
+                    },
+                    onRegisterSucces = {
+                        mainViewModel.navigateTo(AppRoute.Profile)
+                    }
+                )
             }
             composable(AppRoute.Cart.route){
                 CartScreen(cartViewModel)
