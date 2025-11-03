@@ -1,5 +1,10 @@
 package com.example.levelupmovil.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -8,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -22,6 +28,8 @@ import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.ui.screens.HomeScreen
+import com.example.levelupmovil.ui.screens.LevelUpScreen
 import com.example.levelupmovil.ui.screens.ProfileScreen
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
@@ -42,7 +50,10 @@ fun MainScreen() {
     val searchViewModel: SearchViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
 
-
+    val productDao = AppDataBase.getDatabase(context).productDao()
+    val catalogViewModel: CatalogViewModel = viewModel(
+        factory = CatalogViewModelFactory(productDao)
+    )
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
@@ -50,7 +61,6 @@ fun MainScreen() {
                 is NavigationEvent.NavigateTo -> {
                     val routeWithArgs = event.args?.entries?.joinToString("&") { "${it.key}=${it.value}" }
                         ?.let { "${event.appRoute.route}?$it" } ?: event.appRoute.route
-
                     navController.navigate(routeWithArgs) {
                         launchSingleTop=event.singleTop
                         restoreState=true
@@ -60,7 +70,6 @@ fun MainScreen() {
                                 saveState = true
                             }
                         }
-
                     }
                 }
                 NavigationEvent.NavigateUp -> navController.navigateUp()
@@ -97,20 +106,32 @@ fun MainScreen() {
         },
         bottomBar = {
             BottomBar{route ->
-                mainViewModel.navigateTo(route,singleTop=true, popRoute = AppRoute.Home, inclusive = false)
+                mainViewModel.navigateTo(
+                    route,singleTop=true,
+                    popRoute = AppRoute.Home,
+                    inclusive = false
+                )
             }
         }
     ) { innerPadding ->
+        val animSpec = tween<IntOffset>(durationMillis = 300)
+        val fadeSpec = tween<Float>(durationMillis = 300)
         NavHost(
             navController = navController,
             startDestination = AppRoute.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = {it},animationSpec = animSpec) +
+                        fadeIn(animationSpec = fadeSpec ) },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -it }, animationSpec = animSpec) +
+                        fadeOut(animationSpec = fadeSpec)
+            },
         ) {
             composable(AppRoute.Home.route) {
-                Text("Pantalla inicio")
-            }
-            composable(AppRoute.Profile.route) {
-                Text("Pantalla Perfil")
+                HomeScreen()
             }
             composable(
                 route = AppRoute.Catalog.route + "?searchQuery={searchQuery}",
@@ -121,12 +142,7 @@ fun MainScreen() {
                     }
                 )
             ) { backStackEntry ->
-
                 val query = backStackEntry.arguments?.getString("searchQuery") ?: ""
-                val productDao = AppDataBase.getDatabase(context).productDao()
-                val catalogViewModel: CatalogViewModel = viewModel(
-                    factory = CatalogViewModelFactory(productDao)
-                )
 
                 CatalogScreen(
                     onProductClick = { product ->
@@ -139,7 +155,7 @@ fun MainScreen() {
                 )
             }
             composable(AppRoute.LevelUp.route) {
-                Text("Pantalla Level up")
+                LevelUpScreen()
             }
             composable(AppRoute.Profile.route) {
                 ProfileScreen(
