@@ -42,6 +42,7 @@ import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.DataStoreViewModelFactory
 import com.example.levelupmovil.viewmodel.LoginViewModel
+import com.example.levelupmovil.viewmodel.ProfileViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
 import com.example.levelupmovil.viewmodel.RegisterViewModel
 
@@ -99,6 +100,8 @@ fun MainScreen() {
                     mainViewModel.navigateTo(
                         AppRoute.Cart,
                         singleTop = true,
+                        inclusive = true,
+                        popRoute = AppRoute.Catalog
                     )
                 },
                 onSearch = {
@@ -171,8 +174,10 @@ fun MainScreen() {
                 LevelUpScreen()
             }
             composable(AppRoute.Profile.route) {
+                val profileViewModel: ProfileViewModel = viewModel(factory = dataStoreFactory)
                 if(isLoggedIn) {
                     ProfileScreen(
+                        viewModel = profileViewModel,
                         onLogout = {
                             authViewModel.onLogout()
                             mainViewModel.navigateTo(AppRoute.Login, inclusive = true)

@@ -17,6 +17,10 @@ class DataStoreViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return RegisterViewModel(userDataStore) as T
         }
+        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ProfileViewModel(userDataStore) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

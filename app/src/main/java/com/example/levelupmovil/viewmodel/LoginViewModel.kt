@@ -3,7 +3,6 @@ package com.example.levelupmovil.viewmodel
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.compose.AsyncImagePainter
 import com.example.levelupmovil.model.LoginErrores
 import com.example.levelupmovil.model.LoginUiState
 import com.example.levelupmovil.repository.UserDataStore
@@ -58,7 +57,7 @@ class LoginViewModel(
             val savedData = userDataStore.userDataFlow.first()
             val email = _loginData.value.email
             val passwd = _loginData.value.password
-            if (email == savedData.email && passwd == savedData.passwordHash){
+            if (email == savedData.email && passwd == savedData.password){
                 onSuccess()
             }else {
                 _loginData.update {

@@ -66,8 +66,9 @@ class RegisterViewModel(
         if (validarFormulario() && _estado.value.aceptaTerminos) {
             viewModelScope.launch {
                 val datosUsuario = UserData(
+                    name = _estado.value.name,
                     email = _estado.value.email,
-                    passwordHash = _estado.value.password
+                    password = _estado.value.password
                 )
                 userDataStore.saveUserData(datosUsuario)
                 onSuccess()

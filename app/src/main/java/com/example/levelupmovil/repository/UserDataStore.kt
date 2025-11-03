@@ -14,20 +14,23 @@ import kotlinx.coroutines.flow.map
 class UserDataStore(private val context: Context) {
     companion object {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
+        val USER_NAME_KEY = stringPreferencesKey("USER_NAME")
         val USER_EMAIL_KEY = stringPreferencesKey("USER_EMAIL")
         val USER_PASSWORD_HASH_KEY = stringPreferencesKey("USER_PASSWORD_HASH")
     }
 
     suspend fun saveUserData(userData: UserData) {
         context.dataStore.edit { preferences ->
+            preferences[USER_NAME_KEY] = userData.name
             preferences[USER_EMAIL_KEY] = userData.email
-            preferences[USER_PASSWORD_HASH_KEY] = userData.passwordHash
+            preferences[USER_PASSWORD_HASH_KEY] = userData.password
         }
     }
     val userDataFlow: Flow<UserData> = context.dataStore.data.map { preferences ->
         UserData(
+            name = preferences[USER_NAME_KEY] ?: "",
             email = preferences[USER_EMAIL_KEY] ?: "",
-            passwordHash = preferences[USER_PASSWORD_HASH_KEY] ?: ""
+            password = preferences[USER_PASSWORD_HASH_KEY] ?: ""
         )
     }
 }
