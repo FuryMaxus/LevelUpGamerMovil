@@ -26,7 +26,7 @@ fun LoginScreen(
     onRegisterClick: () -> Unit,
     viewModel: LoginViewModel
 ){
-    val estado by viewModel.estado.collectAsState()
+    val estado by viewModel.loginData.collectAsState()
 
     Column(
         Modifier
@@ -70,9 +70,7 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                if (viewModel.validarFormulario()){
-                    onLoginSuccess()
-                }
+                viewModel.tryLogin(onSuccess = onLoginSuccess)
             },
             modifier = Modifier.fillMaxWidth()
         ) {

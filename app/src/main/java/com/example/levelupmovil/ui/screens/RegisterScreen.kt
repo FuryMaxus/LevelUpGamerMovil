@@ -21,7 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.levelupmovil.viewmodel.UsuarioViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.levelupmovil.viewmodel.RegisterViewModel
 
 
 
@@ -29,7 +30,7 @@ import com.example.levelupmovil.viewmodel.UsuarioViewModel
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     onLoginClick: () -> Unit,
-    viewModel: UsuarioViewModel
+    viewModel: RegisterViewModel
 ){
     val estado by viewModel.estado.collectAsState()
 
@@ -98,9 +99,9 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                if (viewModel.validarFormulario()&& estado.aceptaTerminos){
-                    onRegisterSuccess()
-                }
+                viewModel.registrarUsuario(
+                    onSuccess = onRegisterSuccess
+                )
             },
             modifier = Modifier.fillMaxWidth()
         ) {

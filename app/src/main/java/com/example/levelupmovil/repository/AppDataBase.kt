@@ -31,7 +31,6 @@ abstract class AppDataBase: RoomDatabase() {
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            // Inserta los productos iniciales en una corrutina
                             CoroutineScope(Dispatchers.IO).launch {
                                 getDatabase(context).productDao()
                                     .insertAll(SeedProducts.allProducts)

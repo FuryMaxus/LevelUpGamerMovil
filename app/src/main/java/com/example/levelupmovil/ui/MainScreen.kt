@@ -8,9 +8,11 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
@@ -23,6 +25,7 @@ import androidx.navigation.navArgument
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
+import com.example.levelupmovil.repository.UserDataStore
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.ui.components.TopBar
@@ -30,13 +33,18 @@ import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
 import com.example.levelupmovil.ui.screens.HomeScreen
 import com.example.levelupmovil.ui.screens.LevelUpScreen
+import com.example.levelupmovil.ui.screens.LoginScreen
 import com.example.levelupmovil.ui.screens.ProfileScreen
+import com.example.levelupmovil.ui.screens.RegisterScreen
+import com.example.levelupmovil.viewmodel.AuthViewModel
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
+import com.example.levelupmovil.viewmodel.DataStoreViewModelFactory
 import com.example.levelupmovil.viewmodel.LoginViewModel
+import com.example.levelupmovil.viewmodel.ProfileViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
-import com.example.levelupmovil.viewmodel.UsuarioViewModel
+import com.example.levelupmovil.viewmodel.RegisterViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,11 +57,17 @@ fun MainScreen() {
     val mainViewModel: MainViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
 
     val productDao = AppDataBase.getDatabase(context).productDao()
     val catalogViewModel: CatalogViewModel = viewModel(
         factory = CatalogViewModelFactory(productDao)
     )
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
+    val dataStore = remember { UserDataStore(context) }
+    val dataStoreFactory = DataStoreViewModelFactory(dataStore)
+
 
     LaunchedEffect(Unit) {
         mainViewModel.navEvents.collect{ event ->
@@ -86,6 +100,8 @@ fun MainScreen() {
                     mainViewModel.navigateTo(
                         AppRoute.Cart,
                         singleTop = true,
+                        inclusive = true,
+                        popRoute = AppRoute.Catalog
                     )
                 },
                 onSearch = {
@@ -158,22 +174,44 @@ fun MainScreen() {
                 LevelUpScreen()
             }
             composable(AppRoute.Profile.route) {
-                ProfileScreen(
-                    onLoginSucces = {
-                        mainViewModel.navigateTo(
-                            AppRoute.Home,
-                            singleTop = true,
-                            popRoute = AppRoute.Profile,
-                            inclusive = true
-                        )
-                    },
-                    onRegisterSucces = {
-                        mainViewModel.navigateTo(AppRoute.Profile)
-                    }
-                )
+                val profileViewModel: ProfileViewModel = viewModel(factory = dataStoreFactory)
+                if(isLoggedIn) {
+                    ProfileScreen(
+                        viewModel = profileViewModel,
+                        onLogout = {
+                            authViewModel.onLogout()
+                            mainViewModel.navigateTo(AppRoute.Login, inclusive = true)
+                        }
+                    )
+                } else {
+                    mainViewModel.navigateTo(AppRoute.Login, inclusive = true)
+                }
+
             }
             composable(AppRoute.Cart.route){
                 CartScreen(cartViewModel)
+            }
+            composable(AppRoute.Login.route) {
+                val loginViewModel: LoginViewModel = viewModel(factory = dataStoreFactory)
+                LoginScreen(
+                    viewModel = loginViewModel,
+                    onLoginSuccess = {
+                        authViewModel.onLoginSuccess()
+                        mainViewModel.navigateTo(AppRoute.Profile, inclusive = true, popRoute = AppRoute.Login)
+                    },
+                    onRegisterClick = { mainViewModel.navigateTo(AppRoute.Register) }
+                )
+            }
+            composable(AppRoute.Register.route){
+                val registerViewModel: RegisterViewModel = viewModel(factory = dataStoreFactory)
+                RegisterScreen(
+                    viewModel = registerViewModel,
+                    onRegisterSuccess = {
+                        authViewModel.onLoginSuccess()
+                        mainViewModel.navigateTo(AppRoute.Profile, inclusive = true)
+                    },
+                    onLoginClick = { mainViewModel.navigateBack() }
+                )
             }
         }
 

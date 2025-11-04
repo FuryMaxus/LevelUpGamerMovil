@@ -2,13 +2,19 @@ package com.example.levelupmovil.viewmodel
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.levelupmovil.model.UserData
 import com.example.levelupmovil.model.UsuarioErrores
 import com.example.levelupmovil.model.UsuarioUiState
+import com.example.levelupmovil.repository.UserDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class UsuarioViewModel : ViewModel() {
+class RegisterViewModel(
+    private val userDataStore: UserDataStore
+) : ViewModel() {
     private val _estado = MutableStateFlow(UsuarioUiState())
 
     val estado: StateFlow<UsuarioUiState> = _estado
@@ -54,6 +60,20 @@ class UsuarioViewModel : ViewModel() {
 
         return !hayErrores
 
+    }
+
+    fun registrarUsuario(onSuccess: () -> Unit) {
+        if (validarFormulario() && _estado.value.aceptaTerminos) {
+            viewModelScope.launch {
+                val datosUsuario = UserData(
+                    name = _estado.value.name,
+                    email = _estado.value.email,
+                    password = _estado.value.password
+                )
+                userDataStore.saveUserData(datosUsuario)
+                onSuccess()
+            }
+        }
     }
 
 
