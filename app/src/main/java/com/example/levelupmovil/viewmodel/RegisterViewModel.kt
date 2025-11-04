@@ -68,7 +68,8 @@ class RegisterViewModel(
                 val datosUsuario = UserData(
                     name = _estado.value.name,
                     email = _estado.value.email,
-                    password = _estado.value.password
+                    password = _estado.value.password,
+                    profilePicUri = ""
                 )
                 userDataStore.saveUserData(datosUsuario)
                 onSuccess()
