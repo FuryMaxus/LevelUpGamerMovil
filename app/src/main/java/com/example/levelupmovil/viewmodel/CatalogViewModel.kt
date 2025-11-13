@@ -35,7 +35,7 @@ class CatalogViewModel(private val repository: ProductRepository): ViewModel() {
     ) { query, category ->
         Pair(query, category)
     }.flatMapLatest { (query, category) ->
-        repository.getFilteredProducts(query, category?.name)
+        repository.getFilteredProducts(query, category?.dbValue)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
