@@ -1,4 +1,4 @@
-package com.example.levelupmovil.model
+package com.example.levelupmovil.data.model
 
 
 

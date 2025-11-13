@@ -1,11 +1,10 @@
 package com.example.levelupmovil.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.levelupmovil.model.CartItem
-import com.example.levelupmovil.model.Product
+import com.example.levelupmovil.data.model.CartItem
+import com.example.levelupmovil.data.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.collections.remove
 
 class CartViewModel: ViewModel() {
 

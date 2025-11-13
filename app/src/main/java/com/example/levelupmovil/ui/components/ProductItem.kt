@@ -2,7 +2,6 @@ package com.example.levelupmovil.ui.components
 
 
 
-import android.text.Layout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.example.levelupmovil.model.Product
+import com.example.levelupmovil.data.model.Product
 import com.example.levelupmovil.R
 
 @Composable

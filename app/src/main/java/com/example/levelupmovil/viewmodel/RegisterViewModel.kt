@@ -3,9 +3,9 @@ package com.example.levelupmovil.viewmodel
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.levelupmovil.model.UserData
-import com.example.levelupmovil.model.UsuarioErrores
-import com.example.levelupmovil.model.UsuarioUiState
+import com.example.levelupmovil.data.model.UserData
+import com.example.levelupmovil.data.model.UsuarioErrores
+import com.example.levelupmovil.data.model.UsuarioUiState
 import com.example.levelupmovil.repository.UserDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

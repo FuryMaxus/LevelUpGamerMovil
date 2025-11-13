@@ -85,6 +85,10 @@ dependencies {
     implementation(libs.androidx.databinding.adapters)
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.volley)
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Convertidor para JSON
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     val room_version = "2.8.3"
 
     implementation("androidx.room:room-runtime:$room_version")

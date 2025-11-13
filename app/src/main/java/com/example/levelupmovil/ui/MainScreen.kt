@@ -39,7 +39,6 @@ import com.example.levelupmovil.ui.screens.RegisterScreen
 import com.example.levelupmovil.viewmodel.AuthViewModel
 import com.example.levelupmovil.viewmodel.CartViewModel
 import com.example.levelupmovil.viewmodel.CatalogViewModel
-import com.example.levelupmovil.viewmodel.CatalogViewModelFactory
 import com.example.levelupmovil.viewmodel.DataStoreViewModelFactory
 import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.ProfileViewModel
@@ -59,10 +58,6 @@ fun MainScreen() {
     val cartViewModel: CartViewModel = viewModel()
     val authViewModel: AuthViewModel = viewModel()
 
-    val productDao = AppDataBase.getDatabase(context).productDao()
-    val catalogViewModel: CatalogViewModel = viewModel(
-        factory = CatalogViewModelFactory(productDao)
-    )
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val dataStore = remember { UserDataStore(context) }
@@ -164,7 +159,6 @@ fun MainScreen() {
                     onProductClick = { product ->
                     },
                     searchQuery = query,
-                    catalogViewModel = catalogViewModel,
                     onAddToCartClick = { product ->
                         cartViewModel.addToCart(product)
                     }
