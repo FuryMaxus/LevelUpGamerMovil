@@ -2,10 +2,15 @@ package com.example.levelupmovil.viewmodel
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.levelupmovil.LevelUpMovilApplication
 import com.example.levelupmovil.data.model.LoginErrores
 import com.example.levelupmovil.data.model.LoginUiState
-import com.example.levelupmovil.repository.UserDataStore
+import com.example.levelupmovil.repository.AuthRepository
+import com.example.levelupmovil.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -13,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val userDataStore: UserDataStore
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _loginData = MutableStateFlow(LoginUiState())
@@ -54,15 +59,26 @@ class LoginViewModel(
             return
         }
         viewModelScope.launch {
-            val savedData = userDataStore.userDataFlow.first()
             val email = _loginData.value.email
-            val passwd = _loginData.value.password
-            if (email == savedData.email && passwd == savedData.password){
+            val password = _loginData.value.password
+            val result = authRepository.login(email, password)
+
+            if (result.isSuccess) {
                 onSuccess()
-            }else {
+            } else {
+                val mensajeError = result.exceptionOrNull()?.message ?: "Error de conexión o credenciales"
                 _loginData.update {
-                    it.copy(errors = it.errors.copy(email = "Email o contraseña incorrectos"))
+                    it.copy(errors = it.errors.copy(email = mensajeError))
                 }
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val app = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as LevelUpMovilApplication)
+                LoginViewModel(app.container.authRepository)
             }
         }
     }

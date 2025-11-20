@@ -3,10 +3,10 @@ package com.example.levelupmovil.repository
 import com.example.levelupmovil.data.model.Category
 import com.example.levelupmovil.data.model.Product
 import com.example.levelupmovil.data.model.ProductCondition
-import com.example.levelupmovil.data.remote.ApiService
+import com.example.levelupmovil.data.remote.ProductApiService
 import kotlinx.coroutines.flow.Flow
 
-class ProductRepository(private val api: ApiService,
+class ProductRepository(private val api: ProductApiService,
                         private val dao: ProductDao) {
 
     val products: Flow<List<Product>> = dao.getAllProducts()
