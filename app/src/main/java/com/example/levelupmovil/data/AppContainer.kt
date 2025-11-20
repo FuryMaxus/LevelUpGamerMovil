@@ -12,7 +12,7 @@ class AppContainer(private val context: Context) {
 
     private val BASE_URL = "http://192.168.1.17:8080/"
 
-    private val retrofit: Retrofit by lazy {
+    private val productRetrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -20,7 +20,7 @@ class AppContainer(private val context: Context) {
     }
 
     private val apiService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
+        productRetrofit.create(ApiService::class.java)
     }
 
     private val database: AppDataBase by lazy {
