@@ -22,9 +22,7 @@ class AuthInterceptor(
             return chain.proceed(request)
         }
 
-        val token = runBlocking {
-            userPreferences.authToken.first()
-        }
+        val token = userPreferences.getTokenInstant()
 
         val requestBuilder = chain.request().newBuilder()
 

@@ -14,9 +14,17 @@ class AuthRepository(
         return try {
 
             val response = api.login(LoginRequest(email, pass))
-            val userInfo = api.getMyProfile()
 
-            userPreferences.saveAuthData(email = userInfo.email, name = userInfo.name, token = response.jwt)
+            userPreferences.saveToken(response.jwt)
+
+            val userProfile = api.getMyProfile()
+
+            userPreferences.saveAuthData(
+                token = response.jwt,
+                name = userProfile.name,
+                email = userProfile.email
+            )
+
             Result.success(true)
         } catch (e: Exception) {
             e.printStackTrace()

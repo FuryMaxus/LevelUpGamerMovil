@@ -85,6 +85,9 @@ dependencies {
     implementation(libs.androidx.databinding.adapters)
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.volley)
+
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Convertidor para JSON
