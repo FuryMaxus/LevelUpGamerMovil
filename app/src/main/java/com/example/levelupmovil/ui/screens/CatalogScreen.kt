@@ -8,10 +8,11 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
-import com.example.levelupmovil.model.Product
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.levelupmovil.data.model.Product
 import com.example.levelupmovil.ui.components.CategorySlider
 import com.example.levelupmovil.ui.components.ProductItem
 import com.example.levelupmovil.viewmodel.CatalogViewModel
@@ -19,25 +20,23 @@ import com.example.levelupmovil.viewmodel.CatalogViewModel
 @Composable
 fun CatalogScreen(
     searchQuery: String,
-    catalogViewModel: CatalogViewModel,
+    catalogViewModel: CatalogViewModel = viewModel(factory = CatalogViewModel.Factory),
     onProductClick: (Product) -> Unit,
     onAddToCartClick: (Product) -> Unit
 ) {
 
-    val products by catalogViewModel.filteredProducts.collectAsState()
-    val selectedCategory by catalogViewModel.selectedCategory.collectAsState()
+    val products by catalogViewModel.filteredProducts.collectAsStateWithLifecycle()
+    val selectedCategory by catalogViewModel.selectedCategory.collectAsStateWithLifecycle()
 
     LaunchedEffect(searchQuery) {
-        catalogViewModel.filterProducts(searchQuery)
+        catalogViewModel.updateSearchQuery(searchQuery)
     }
-
 
     Column {
         CategorySlider(
             selectedCategory = selectedCategory,
             onCategoryClick = { category ->
-                val newCategory = if (category == selectedCategory) null else category
-                catalogViewModel.selectCategory(newCategory)
+                catalogViewModel.selectCategory(category)
             }
         )
         LazyVerticalGrid(

@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.levelupmovil.model.UserData
+import com.example.levelupmovil.data.model.UserData
 import com.example.levelupmovil.repository.UserDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

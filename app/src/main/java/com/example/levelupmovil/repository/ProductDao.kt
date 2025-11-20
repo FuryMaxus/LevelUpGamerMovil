@@ -4,20 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.levelupmovil.model.Product
+import com.example.levelupmovil.data.model.Product
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
 
     @Query("SELECT * FROM products")
-    suspend fun getAllProducts(): List<Product>
+    fun getAllProducts(): Flow<List<Product>>
 
     @Query("""
         SELECT * FROM products
         WHERE (:category IS NULL OR category = :category)
         AND (:query IS NULL OR name LIKE '%' || :query || '%')
     """)
-    suspend fun getFilteredProducts(query: String?, category: String?): List<Product>
+    fun getFilteredProducts(query: String?, category: String?): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(products: List<Product>)

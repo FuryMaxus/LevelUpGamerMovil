@@ -3,8 +3,8 @@ package com.example.levelupmovil.viewmodel
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.levelupmovil.model.LoginErrores
-import com.example.levelupmovil.model.LoginUiState
+import com.example.levelupmovil.data.model.LoginErrores
+import com.example.levelupmovil.data.model.LoginUiState
 import com.example.levelupmovil.repository.UserDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

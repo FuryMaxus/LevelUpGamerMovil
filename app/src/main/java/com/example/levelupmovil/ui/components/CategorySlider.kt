@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.levelupmovil.model.Category
+import com.example.levelupmovil.data.model.Category
 
 @Composable
 fun CategorySlider(
