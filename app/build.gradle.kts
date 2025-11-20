@@ -5,6 +5,22 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+val myApiIp: String = try {
+    val localFile = rootProject.file("local.properties")
+    if (localFile.exists()) {
+        localFile.readLines()
+            .find { it.trim().startsWith("MY_API_IP") }
+            ?.substringAfter("=")
+            ?.trim()
+            ?.replace("\"", "")
+            ?: "10.0.2.2"
+    } else {
+        "10.0.2.2"
+    }
+} catch (e: Exception) {
+    "10.0.2.2"
+}
+
 android {
     namespace = "com.example.levelupmovil"
     compileSdk = 36
@@ -15,10 +31,15 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "API_IP", "\"$myApiIp\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    //
     buildTypes {
         release {
             isMinifyEnabled = false

@@ -3,6 +3,7 @@ package com.example.levelupmovil.data
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import com.example.levelupmovil.BuildConfig
 import com.example.levelupmovil.data.remote.AuthApiService
 import com.example.levelupmovil.data.remote.AuthInterceptor
 import com.example.levelupmovil.data.remote.ProductApiService
@@ -18,7 +19,7 @@ import kotlin.getValue
 private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 class AppContainer(private val context: Context) {
 
-    private val IP_ADDRESS = "192.168.1.17"
+    private val IP_ADDRESS = BuildConfig.API_IP
 
     private val database: AppDataBase by lazy {
         Room.databaseBuilder(
