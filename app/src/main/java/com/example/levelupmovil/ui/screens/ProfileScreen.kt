@@ -117,6 +117,7 @@ fun ProfileScreen(
                 text = userData.email,
                 style = MaterialTheme.typography.titleMedium
             )
+            Text(text = "Dirección: ${userData.address}")
 
             Spacer(modifier = Modifier.height(32.dp))
 

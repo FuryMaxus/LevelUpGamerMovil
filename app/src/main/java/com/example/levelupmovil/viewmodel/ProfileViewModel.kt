@@ -27,7 +27,7 @@ class ProfileViewModel(
     val userData: StateFlow<UserData> = userPreferencesRepository.userData.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = UserData(name = "", email = "", password = "", profilePicUri = "")
+        initialValue = UserData(name = "", email = "", password = "", profilePicUri = "", address = "")
     )
 
     private val _tempFotoUri = MutableStateFlow<Uri?>(null)

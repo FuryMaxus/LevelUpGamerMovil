@@ -18,6 +18,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val USER_NAME = stringPreferencesKey("user_name")
         val USER_EMAIL = stringPreferencesKey("user_email")
         val USER_PIC_URI = stringPreferencesKey("user_pic_uri")
+        val USER_ADDRESS = stringPreferencesKey("user_address")
     }
 
     private var cachedToken: String? = null
@@ -32,7 +33,8 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
             name = preferences[USER_NAME] ?: "",
             email = preferences[USER_EMAIL] ?: "",
             password = "",
-            profilePicUri = preferences[USER_PIC_URI] ?: ""
+            profilePicUri = preferences[USER_PIC_URI] ?: "",
+            address = preferences[USER_ADDRESS] ?: "Sin dirección"
         )
     }
 
@@ -48,12 +50,13 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
             preferences[AUTH_TOKEN] = token
         }
     }
-    suspend fun saveAuthData(token: String, name: String, email: String) {
+    suspend fun saveAuthData(token: String, name: String, email: String, address: String?) {
         cachedToken = token
         dataStore.edit { preferences ->
             preferences[AUTH_TOKEN] = token
             preferences[USER_NAME] = name
             preferences[USER_EMAIL] = email
+            preferences[USER_ADDRESS] = address ?: ""
         }
     }
 

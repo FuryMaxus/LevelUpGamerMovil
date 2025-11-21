@@ -1,7 +1,6 @@
 package com.example.levelupmovil.repository
 
 import com.example.levelupmovil.data.remote.AuthApiService
-import com.example.levelupmovil.data.remote.ProductApiService
 import com.example.levelupmovil.data.remote.LoginRequest
 import com.example.levelupmovil.data.remote.RegisterRequest
 
@@ -22,7 +21,8 @@ class AuthRepository(
             userPreferences.saveAuthData(
                 token = response.jwt,
                 name = userProfile.name,
-                email = userProfile.email
+                email = userProfile.email,
+                address = userProfile.address
             )
 
             Result.success(true)
@@ -32,9 +32,16 @@ class AuthRepository(
         }
     }
 
-    suspend fun register(name: String, email: String, pass: String): Result<Boolean> {
+    suspend fun register(name: String, email: String, pass: String, address: String): Result<Boolean> {
         return try {
-            api.register(RegisterRequest(username = name, password = pass, email = email))
+            api.register(
+                RegisterRequest(
+                    username = name,
+                    password = pass,
+                    email = email,
+                    address = address
+                )
+            )
             login(email, pass)
 
         } catch (e: Exception) {

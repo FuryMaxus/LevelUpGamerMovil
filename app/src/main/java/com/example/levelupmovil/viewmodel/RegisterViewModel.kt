@@ -46,6 +46,10 @@ class RegisterViewModel(
         _estado.update { it.copy(aceptaTerminos = newAceptaTerminos) }
     }
 
+    fun onAddressChange(newAddress: String) {
+        _estado.update { it.copy(address = newAddress) }
+    }
+
 
     fun validarFormulario(): Boolean {
         val formularioActual = _estado.value
@@ -77,7 +81,8 @@ class RegisterViewModel(
                 val result = authRepository.register(
                     name = _estado.value.name,
                     email = _estado.value.email,
-                    pass = _estado.value.password
+                    pass = _estado.value.password,
+                    address = _estado.value.address
                 )
                 _isLoading.value = false
 
