@@ -4,9 +4,13 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.levelupmovil.LevelUpMovilApplication
 import com.example.levelupmovil.data.model.UserData
-import com.example.levelupmovil.repository.UserDataStore
+import com.example.levelupmovil.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,13 +21,13 @@ import java.io.FileOutputStream
 
 
 class ProfileViewModel(
-    private val userDataStore: UserDataStore
+    private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
 
-    val userData: StateFlow<UserData> = userDataStore.userDataFlow.stateIn(
+    val userData: StateFlow<UserData> = userPreferencesRepository.userData.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = UserData(name = "", email = "", password = "",profilePicUri = "")
+        initialValue = UserData(name = "", email = "", password = "", profilePicUri = "", address = "")
     )
 
     private val _tempFotoUri = MutableStateFlow<Uri?>(null)
@@ -55,7 +59,7 @@ class ProfileViewModel(
             if (permanentUri != null) {
                 val uriString = permanentUri.toString()
                 val cacheBustedUri = "$uriString?v=${System.currentTimeMillis()}"
-                userDataStore.updateUserProfilePic(cacheBustedUri)
+                userPreferencesRepository.updateUserProfilePic(cacheBustedUri)
             }
         }
     }
@@ -70,7 +74,7 @@ class ProfileViewModel(
             inputStream?.copyTo(outputStream)
 
             inputStream?.close()
-            outputStream?.close()
+            outputStream.close()
 
             Uri.fromFile(file)
         } catch (e: Exception) {
@@ -86,5 +90,15 @@ class ProfileViewModel(
             subDirectorio.mkdirs()
         }
         return File(subDirectorio, "profile_pic.jpg")
+    }
+
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val app = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as LevelUpMovilApplication)
+                ProfileViewModel(app.container.userPreferencesRepository)
+            }
+        }
     }
 }

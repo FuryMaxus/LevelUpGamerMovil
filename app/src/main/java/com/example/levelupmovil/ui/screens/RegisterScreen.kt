@@ -72,6 +72,13 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
+        OutlinedTextField(
+            value = estado.address,
+            onValueChange = viewModel::onAddressChange ,
+            label = { Text("Dirección de envío") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
 
         OutlinedTextField(
             value = estado.password,

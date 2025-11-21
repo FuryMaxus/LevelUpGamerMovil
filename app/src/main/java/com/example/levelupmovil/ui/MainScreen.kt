@@ -25,7 +25,6 @@ import androidx.navigation.navArgument
 import com.example.levelupmovil.navigation.AppRoute
 import com.example.levelupmovil.navigation.NavigationEvent
 import com.example.levelupmovil.repository.AppDataBase
-import com.example.levelupmovil.repository.UserDataStore
 import com.example.levelupmovil.ui.components.BottomBar
 import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.ui.components.TopBar
@@ -38,8 +37,6 @@ import com.example.levelupmovil.ui.screens.ProfileScreen
 import com.example.levelupmovil.ui.screens.RegisterScreen
 import com.example.levelupmovil.viewmodel.AuthViewModel
 import com.example.levelupmovil.viewmodel.CartViewModel
-import com.example.levelupmovil.viewmodel.CatalogViewModel
-import com.example.levelupmovil.viewmodel.DataStoreViewModelFactory
 import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.ProfileViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
@@ -56,12 +53,10 @@ fun MainScreen() {
     val mainViewModel: MainViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
-    val authViewModel: AuthViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModel.Factory)
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
-    val dataStore = remember { UserDataStore(context) }
-    val dataStoreFactory = DataStoreViewModelFactory(dataStore)
 
 
     LaunchedEffect(Unit) {
@@ -168,7 +163,7 @@ fun MainScreen() {
                 LevelUpScreen()
             }
             composable(AppRoute.Profile.route) {
-                val profileViewModel: ProfileViewModel = viewModel(factory = dataStoreFactory)
+                val profileViewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.Factory)
                 if(isLoggedIn) {
                     ProfileScreen(
                         viewModel = profileViewModel,
@@ -178,7 +173,9 @@ fun MainScreen() {
                         }
                     )
                 } else {
-                    mainViewModel.navigateTo(AppRoute.Login, inclusive = true)
+                    LaunchedEffect(Unit) {
+                        mainViewModel.navigateTo(AppRoute.Login)
+                    }
                 }
 
             }
@@ -186,22 +183,22 @@ fun MainScreen() {
                 CartScreen(cartViewModel)
             }
             composable(AppRoute.Login.route) {
-                val loginViewModel: LoginViewModel = viewModel(factory = dataStoreFactory)
+                val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
                 LoginScreen(
                     viewModel = loginViewModel,
                     onLoginSuccess = {
-                        authViewModel.onLoginSuccess()
+                        authViewModel.isLoggedIn
                         mainViewModel.navigateTo(AppRoute.Profile, inclusive = true, popRoute = AppRoute.Login)
                     },
                     onRegisterClick = { mainViewModel.navigateTo(AppRoute.Register) }
                 )
             }
             composable(AppRoute.Register.route){
-                val registerViewModel: RegisterViewModel = viewModel(factory = dataStoreFactory)
+                val registerViewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory)
                 RegisterScreen(
                     viewModel = registerViewModel,
                     onRegisterSuccess = {
-                        authViewModel.onLoginSuccess()
+                        authViewModel.isLoggedIn
                         mainViewModel.navigateTo(AppRoute.Profile, inclusive = true)
                     },
                     onLoginClick = { mainViewModel.navigateBack() }
