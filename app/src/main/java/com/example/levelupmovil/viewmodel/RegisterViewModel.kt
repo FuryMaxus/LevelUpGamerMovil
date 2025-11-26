@@ -11,6 +11,7 @@ import com.example.levelupmovil.data.model.UserData
 import com.example.levelupmovil.data.model.UsuarioErrores
 import com.example.levelupmovil.data.model.UsuarioUiState
 import com.example.levelupmovil.repository.AuthRepository
+import com.example.levelupmovil.util.EmailValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -55,15 +56,14 @@ class RegisterViewModel(
         val formularioActual = _estado.value
         val errors = UsuarioErrores(
             name = if (formularioActual.name.isBlank()) "Error, Campo Obligatorio!" else null,
-            email = if (!Patterns.EMAIL_ADDRESS.matcher(formularioActual.email)
-                    .matches()
-            ) "Error, El E-mail debe ser válido!" else null,
+            email = if (!EmailValidator.isValid(formularioActual.email)) "Error, El E-mail debe ser válido!" else null,
             password = if (formularioActual.password.length < 6) "Error, La Contraseña debe tener al menos 6 carácteres!" else null
         )
 
         val hayErrores = listOfNotNull(
             errors.name,
-            errors.password
+            errors.password,
+            errors.email
         ).isNotEmpty()
 
         _estado.update { it.copy(errors = errors) }
