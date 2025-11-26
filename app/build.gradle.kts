@@ -56,9 +56,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
@@ -105,7 +102,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation(libs.androidx.databinding.adapters)
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation(libs.volley)
+
 
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
@@ -120,13 +117,26 @@ dependencies {
     implementation("androidx.room:room-ktx:${room_version}")
 
     // Dependencias de testing
-    testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    // Dependencias de Debug
+    androidTestImplementation("io.mockk:mockk-android:1.13.10")
+
+    // Herramientas de Debug para Tests
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

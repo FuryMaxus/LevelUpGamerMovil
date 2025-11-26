@@ -1,6 +1,6 @@
 package com.example.levelupmovil.viewmodel
 
-import android.util.Patterns
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -10,10 +10,9 @@ import com.example.levelupmovil.LevelUpMovilApplication
 import com.example.levelupmovil.data.model.LoginErrores
 import com.example.levelupmovil.data.model.LoginUiState
 import com.example.levelupmovil.repository.AuthRepository
-import com.example.levelupmovil.repository.UserPreferencesRepository
+import com.example.levelupmovil.util.EmailValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -39,7 +38,7 @@ class LoginViewModel(
     fun validarFormulario(): Boolean{
         val formularioActual = _loginData.value
         val errors = LoginErrores(
-            email = if (!Patterns.EMAIL_ADDRESS.matcher(formularioActual.email).matches()) "Error, el E-mail debe ser válido!" else null,
+            email = if (!EmailValidator.isValid(formularioActual.email)) "Error, el E-mail debe ser válido!" else null,
             password = if (formularioActual.password.length < 6) "Error, la Contraseña debe tener al menos 6 carácteres" else null
         )
 
