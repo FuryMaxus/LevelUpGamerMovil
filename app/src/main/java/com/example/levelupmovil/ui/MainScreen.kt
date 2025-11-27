@@ -37,6 +37,7 @@ import com.example.levelupmovil.ui.screens.ProfileScreen
 import com.example.levelupmovil.ui.screens.RegisterScreen
 import com.example.levelupmovil.viewmodel.AuthViewModel
 import com.example.levelupmovil.viewmodel.CartViewModel
+import com.example.levelupmovil.viewmodel.CatalogViewModel
 import com.example.levelupmovil.viewmodel.LoginViewModel
 import com.example.levelupmovil.viewmodel.ProfileViewModel
 import com.example.levelupmovil.viewmodel.SearchViewModel
@@ -149,8 +150,9 @@ fun MainScreen() {
                 )
             ) { backStackEntry ->
                 val query = backStackEntry.arguments?.getString("searchQuery") ?: ""
-
+                val catalogViewModel: CatalogViewModel = viewModel(factory = CatalogViewModel.Factory)
                 CatalogScreen(
+                    catalogViewModel = catalogViewModel,
                     onProductClick = { product ->
                     },
                     searchQuery = query,
