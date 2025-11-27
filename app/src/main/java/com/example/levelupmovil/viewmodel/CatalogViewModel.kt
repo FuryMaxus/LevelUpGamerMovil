@@ -28,6 +28,10 @@ class CatalogViewModel(private val repository: ProductRepository): ViewModel() {
     private val _selectedCategory = MutableStateFlow<Category?>(null)
     val selectedCategory: StateFlow<Category?> = _selectedCategory.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val filteredProducts: StateFlow<List<Product>> = combine(
         _searchQuery,
@@ -55,6 +59,14 @@ class CatalogViewModel(private val repository: ProductRepository): ViewModel() {
             _selectedCategory.value = null
         } else {
             _selectedCategory.value = category
+        }
+    }
+
+    fun onPullToRefresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            repository.refreshProducts()
+            _isRefreshing.value = false
         }
     }
 
