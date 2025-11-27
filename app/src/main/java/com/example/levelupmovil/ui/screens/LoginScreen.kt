@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.levelupmovil.viewmodel.LoginViewModel
@@ -49,7 +50,7 @@ fun LoginScreen(
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("email_input")
         )
 
 
@@ -64,7 +65,7 @@ fun LoginScreen(
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("password_input")
         )
 
 
@@ -72,7 +73,7 @@ fun LoginScreen(
             onClick = {
                 viewModel.tryLogin(onSuccess = onLoginSuccess)
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("login_button")
         ) {
             Text("Iniciar Sesión")
         }
