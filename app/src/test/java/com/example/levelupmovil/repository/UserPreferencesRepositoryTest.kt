@@ -59,7 +59,8 @@ class UserPreferencesRepositoryTest {
             token = "token_abc",
             name = "jose",
             email = "jose@test.com",
-            address = "calle 1"
+            address = "calle 1",
+            role = "ROL_CLIENTE"
         )
 
         val userData = repository.userData.first()
@@ -67,13 +68,14 @@ class UserPreferencesRepositoryTest {
         userData.name shouldBe "jose"
         userData.email shouldBe "jose@test.com"
         userData.address shouldBe "calle 1"
+        userData.role shouldBe "ROL_CLIENTE"
         repository.getTokenInstant() shouldBe "token_abc"
     }
 
     @Test
     fun `clearAuthData should remove all data`() = runTest {
 
-        repository.saveAuthData("token", "name", "email", "addr")
+        repository.saveAuthData("token", "name", "email",role = "ROL_ADMIN", "addr")
 
         repository.clearAuthData()
 

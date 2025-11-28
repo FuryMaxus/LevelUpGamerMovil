@@ -22,4 +22,10 @@ interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(products: List<Product>)
+
+    @Query("SELECT * FROM products WHERE id = :id")
+    fun getProductById(id: Int): Flow<Product>
+
+    @Query("UPDATE products SET name = :name, price = :price WHERE id = :id")
+    suspend fun updateProductSimple(id: Int, name: String, price: Double)
 }

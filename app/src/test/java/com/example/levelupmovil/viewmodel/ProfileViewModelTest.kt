@@ -30,7 +30,8 @@ class ProfileViewModelTest {
             email = "test@correo.com",
             password = "",
             profilePicUri = "file://some/path.jpg",
-            address = "Calle Falsa 123"
+            address = "Calle Falsa 123",
+            role = "ROL_CLIENTE",
         )
 
         every { userPreferencesRepository.userData } returns flowOf(fakeUser)

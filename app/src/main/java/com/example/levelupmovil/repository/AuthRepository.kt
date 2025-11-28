@@ -3,6 +3,7 @@ package com.example.levelupmovil.repository
 import com.example.levelupmovil.data.remote.AuthApiService
 import com.example.levelupmovil.data.remote.LoginRequest
 import com.example.levelupmovil.data.remote.RegisterRequest
+import com.example.levelupmovil.util.JwtUtils
 
 class AuthRepository(
     private val api: AuthApiService,
@@ -17,12 +18,14 @@ class AuthRepository(
             userPreferences.saveToken(response.jwt)
 
             val userProfile = api.getMyProfile()
-
+            val rolExtraido = JwtUtils.getRoleFromToken(response.jwt)
             userPreferences.saveAuthData(
                 token = response.jwt,
                 name = userProfile.name,
                 email = userProfile.email,
-                address = userProfile.address
+                address = userProfile.address,
+                role = rolExtraido
+
             )
 
             Result.success(true)
