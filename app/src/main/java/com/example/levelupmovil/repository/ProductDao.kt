@@ -26,6 +26,9 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE id = :id")
     fun getProductById(id: Int): Flow<Product>
 
+    @Query("DELETE FROM products WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
     @Query("UPDATE products SET name = :name, price = :price WHERE id = :id")
-    suspend fun updateProductSimple(id: Int, name: String, price: Double)
+    suspend fun updateProductSimple(id: Int, name: String, price: Int)
 }
