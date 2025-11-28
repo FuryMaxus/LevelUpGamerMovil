@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,7 +55,7 @@ fun RegisterScreen(
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("reg_name")
         )
 
 
@@ -69,14 +70,14 @@ fun RegisterScreen(
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("reg_email")
         )
 
         OutlinedTextField(
             value = estado.address,
             onValueChange = viewModel::onAddressChange ,
             label = { Text("Dirección de envío") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("reg_address"),
             singleLine = true
         )
 
@@ -91,14 +92,15 @@ fun RegisterScreen(
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("reg_pass")
         )
 
 
         Row(verticalAlignment = Alignment.CenterVertically){
             Checkbox(
                 checked = estado.aceptaTerminos,
-                onCheckedChange = viewModel::onAceptaTerminosChange
+                onCheckedChange = viewModel::onAceptaTerminosChange,
+                modifier = Modifier.testTag("reg_terms")
             )
             Spacer(Modifier.width(8.dp))
             Text("Acepto los términos y condiciones")
@@ -110,7 +112,7 @@ fun RegisterScreen(
                     onSuccess = onRegisterSuccess
                 )
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("reg_button")
         ) {
             Text("Registrarse")
         }
