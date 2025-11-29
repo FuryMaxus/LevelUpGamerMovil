@@ -76,6 +76,11 @@ class CatalogViewModel(private val repository: ProductRepository): ViewModel() {
         }
     }
 
+    fun deleteProduct(productId: Int) {
+        viewModelScope.launch {
+            repository.deleteProduct(productId)
+        }
+    }
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

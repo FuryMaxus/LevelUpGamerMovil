@@ -23,6 +23,6 @@ data class ProductDto(
     val imageUrl: String,
     val price: Int,
     val category: String?,
-    @SerializedName("product_condition")
+    @SerializedName("productCondition")
     val condition: String
 )

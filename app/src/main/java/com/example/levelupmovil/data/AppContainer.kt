@@ -15,11 +15,10 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.getValue
+import com.example.levelupmovil.data.remote.ApiConfig
 
 private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 class AppContainer(private val context: Context) {
-
-    private val IP_ADDRESS = BuildConfig.API_IP
 
     private val database: AppDataBase by lazy {
         Room.databaseBuilder(
@@ -38,21 +37,21 @@ class AppContainer(private val context: Context) {
             .addInterceptor(AuthInterceptor(userPreferencesRepository))
             .build()
     }
-    private fun createRetrofit(port: Int): Retrofit {
+    private fun createRetrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://$IP_ADDRESS:$port/")
+            .baseUrl(baseUrl)
             .client(sharedOkHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val authApiService: AuthApiService by lazy {
-        createRetrofit(8081).create(AuthApiService::class.java)
-    }
 
     val productApiService: ProductApiService by lazy {
-        createRetrofit(8080).create(ProductApiService::class.java)
+        createRetrofit(ApiConfig.PRODUCT_BASE_URL).create(ProductApiService::class.java)
     }
 
+    val authApiService: AuthApiService by lazy {
+        createRetrofit(ApiConfig.AUTH_BASE_URL).create(AuthApiService::class.java)
+    }
 
     val productRepository: ProductRepository by lazy {
         ProductRepository(

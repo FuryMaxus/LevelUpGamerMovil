@@ -37,7 +37,7 @@ class AuthRepositoryTest {
 
             apiService.getMyProfile()
 
-            userPreferences.saveAuthData(fakeToken, fakeUser.name, fakeUser.email,fakeUser.address)
+            userPreferences.saveAuthData(fakeToken, fakeUser.name, fakeUser.email,role = "ROL_CLIENTE",fakeUser.address)
         }
     }
 

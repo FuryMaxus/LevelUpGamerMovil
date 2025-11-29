@@ -11,6 +11,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -20,14 +21,19 @@ import com.example.levelupmovil.data.model.Product
 import com.example.levelupmovil.ui.components.CategorySlider
 import com.example.levelupmovil.ui.components.ProductItem
 import com.example.levelupmovil.viewmodel.CatalogViewModel
+import com.example.levelupmovil.viewmodel.ProfileViewModel
 
 @Composable
 fun CatalogScreen(
     searchQuery: String,
     catalogViewModel: CatalogViewModel,
     onProductClick: (Product) -> Unit,
-    onAddToCartClick: (Product) -> Unit
+    onAddToCartClick: (Product) -> Unit,
+    profileViewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.Factory),
+    onEditProductClick: (Int) -> Unit
 ) {
+    val user by profileViewModel.userData.collectAsStateWithLifecycle()
+    val isStaff = remember(user) { user.role == "ROL_ADMIN" || user.role == "ROL_EMPLEADO" }
 
     val products by catalogViewModel.filteredProducts.collectAsStateWithLifecycle()
     val selectedCategory by catalogViewModel.selectedCategory.collectAsStateWithLifecycle()
@@ -60,7 +66,10 @@ fun CatalogScreen(
                     ProductItem(
                         product = p,
                         onClick = { onProductClick(p) },
-                        onButtonClick = {onAddToCartClick(p)}
+                        onAddToCartClick = {onAddToCartClick(p)},
+                        showAdminControls = isStaff,
+                        onEditClick = { onEditProductClick(p.id) },
+                        onDeleteClick = {catalogViewModel.deleteProduct(p.id)}
                     )
                 }
             }

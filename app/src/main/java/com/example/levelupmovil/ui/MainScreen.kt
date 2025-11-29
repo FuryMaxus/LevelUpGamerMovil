@@ -30,6 +30,7 @@ import com.example.levelupmovil.viewmodel.MainViewModel
 import com.example.levelupmovil.ui.components.TopBar
 import com.example.levelupmovil.ui.screens.CartScreen
 import com.example.levelupmovil.ui.screens.CatalogScreen
+import com.example.levelupmovil.ui.screens.EditProductScreen
 import com.example.levelupmovil.ui.screens.HomeScreen
 import com.example.levelupmovil.ui.screens.LevelUpScreen
 import com.example.levelupmovil.ui.screens.LoginScreen
@@ -158,6 +159,9 @@ fun MainScreen() {
                     searchQuery = query,
                     onAddToCartClick = { product ->
                         cartViewModel.addToCart(product)
+                    },
+                    onEditProductClick = { productId ->
+                        navController.navigate("edit_product/$productId")
                     }
                 )
             }
@@ -205,6 +209,15 @@ fun MainScreen() {
                     },
                     onLoginClick = { mainViewModel.navigateBack() }
                 )
+            }
+            composable(
+                route = "edit_product/{productId}",
+                arguments = listOf(navArgument("productId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("productId") ?: 0
+                EditProductScreen(
+                    productId = id,
+                    onNavigateBack = { mainViewModel.navigateBack() })
             }
         }
 
