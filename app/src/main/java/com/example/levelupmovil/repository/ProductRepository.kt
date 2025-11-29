@@ -33,8 +33,12 @@ class ProductRepository(private val api: ProductApiService,
     }
 
     suspend fun deleteProduct(id: Int) {
-        api.deleteProduct(id)
-        dao.deleteById(id)
+        try {
+            api.deleteProduct(id)
+            dao.deleteById(id)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
     suspend fun refreshProducts() {
         try {

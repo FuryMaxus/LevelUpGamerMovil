@@ -4,16 +4,23 @@ package com.example.levelupmovil.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +38,10 @@ import com.example.levelupmovil.R
 fun ProductItem(
     product: Product,
     onClick: () -> Unit,
-    onButtonClick: (Product) -> Unit
+    onAddToCartClick: () -> Unit,
+    showAdminControls: Boolean = false,
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
 ) {
 
     Card(
@@ -62,8 +72,20 @@ fun ProductItem(
                 Text(text = "$${product.price}", style = MaterialTheme.typography.bodyMedium, color = Color.LightGray)
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Button({ onButtonClick(product) }) {
-                Text(text = "Añadir al carrito", textAlign = TextAlign.Center)
+
+            if (showAdminControls) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    IconButton(onClick = onEditClick) {
+                        Icon(Icons.Default.Edit, contentDescription = "Editar")
+                    }
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(Icons.Default.Delete, contentDescription = "Borrar", tint = MaterialTheme.colorScheme.error)
+                    }
+                }
+            } else {
+                Button(onClick = onAddToCartClick, modifier = Modifier.fillMaxWidth()) {
+                    Text("Agregar")
+                }
             }
         }
 
