@@ -56,7 +56,8 @@ class AppContainer(private val context: Context) {
     val productRepository: ProductRepository by lazy {
         ProductRepository(
             api = productApiService,
-            dao = database.productDao()
+            dao = database.productDao(),
+            userPreferences = userPreferencesRepository
         )
     }
 
