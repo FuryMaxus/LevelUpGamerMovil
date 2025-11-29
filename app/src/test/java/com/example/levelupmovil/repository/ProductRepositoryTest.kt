@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test
 class ProductRepositoryTest {
     private val api: ProductApiService = mockk()
     private val dao: ProductDao = mockk(relaxed = true)
-    private val repository = ProductRepository(api, dao)
+
+    private val userPreferences: UserPreferencesRepository = mockk(relaxed = true)
+    private val repository = ProductRepository(api, dao,userPreferences)
 
     @Test
     fun `refreshProducts should fetch from API and save to DAO`() = runTest {
@@ -24,7 +26,8 @@ class ProductRepositoryTest {
 
         repository.refreshProducts()
 
-        coVerify { dao.insertAll(any()) }
+        coVerify { dao.deleteAll() }
+        coVerify { dao.insertAll(any<List<Product>>()) }
     }
 
     @Test
